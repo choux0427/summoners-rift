@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>소환사의 협곡</title>
+<style>
+:root{--bg:#080d18;--panel:#111d30;--line:#2a3c55;--gold:#d8b56d;--txt:#edf2fa;--muted:#9aadc4;--blue:#3d8bd9;--red:#c85d67}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 50% -20%,#1b3553,transparent 48%),var(--bg);color:var(--txt);font:15px/1.55 system-ui,sans-serif}header{background:#09111eee;border-bottom:1px solid var(--line);padding:16px 22px;position:sticky;top:0}.nav,main{max-width:1050px;margin:auto}.brand{color:var(--gold);font-weight:900;font-size:19px}main{padding:25px 18px}.hero{padding:20px 0}.hero h1{font-size:38px;margin:8px 0}.muted,.sub{color:var(--muted)}.panel{background:linear-gradient(145deg,#142238,#0e1727);border:1px solid var(--line);border-radius:14px;padding:19px;margin:14px 0}.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.row{display:flex;gap:9px;flex-wrap:wrap;align-items:center}input,select{background:#091321;color:var(--txt);border:1px solid var(--line);border-radius:9px;padding:11px;font:inherit;min-width:0}input{flex:1}button{background:#1a2b43;color:var(--txt);border:1px solid var(--line);border-radius:9px;padding:10px 14px;font-weight:700;cursor:pointer}button.primary{background:linear-gradient(120deg,#9c7840,#d9b96e);color:#111827;border:0}button:disabled{opacity:.45;cursor:not-allowed}.tabs{display:flex;gap:8px;margin:15px 0;flex-wrap:wrap}.tab.active{border-color:var(--gold);color:var(--gold)}.view[hidden]{display:none}.note{font-size:12px;color:var(--muted)}table{width:100%;border-collapse:collapse;min-width:570px}th,td{text-align:left;padding:10px;border-bottom:1px solid var(--line)}th{font-size:11px;color:var(--muted)}.scroll{overflow:auto}.status{border:1px solid #705d36;color:var(--gold);border-radius:30px;padding:3px 8px;font-size:11px}.good{color:#76d5a9}.bad{color:#ff9da5}.teams{display:grid;grid-template-columns:1fr 1fr;gap:12px}.team{background:#10233b;border:1px solid #315d86;border-radius:12px;padding:14px}.team.red{background:#2a1825;border-color:#74414a}.player{padding:7px 0;border-top:1px solid #ffffff18}.hide{display:none!important}@media(max-width:650px){.grid,.teams{grid-template-columns:1fr}.hero h1{font-size:30px}}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+<header><div class="nav"><div class="brand">✦ 소환사의 협곡</div><div class="note">COMMUNITY INHOUSE · 5 VS 5</div></div></header>
+<main>
+<section class="hero"><div style="color:var(--gold);letter-spacing:.2em;font-size:11px">SUMMONER’S RIFT</div><h1>함께 모여, 한 판의 전설을.</h1><div class="muted">참가 신청은 관리자의 승인 후 내전 명단에 반영됩니다.</div></section>
+<div id="configNotice" class="panel"><b>초기 연결 설정이 필요합니다.</b><p class="sub">아래 안내서의 Supabase 프로젝트 URL과 공개 키를 app.js 상단에 입력한 뒤 사용하세요.</p></div>
+<section id="auth" class="panel">
+<h2>로그인 / 계정 만들기</h2><p class="sub">참가 신청과 관리자 기능을 사용하려면 이메일 계정이 필요합니다.</p>
+<div class="row"><input id="email" type="email" placeholder="이메일"><input id="password" type="password" placeholder="비밀번호 (6자 이상)"></div>
+<div class="row" style="margin-top:10px"><button class="primary" id="signup">계정 만들기</button><button id="login">로그인</button><button id="logout" class="hide">로그아웃</button></div><div id="authMsg" class="note"></div>
+</section>
+<div id="app" class="hide">
+<div class="tabs"><button class="tab active" data-tab="apply">참가 신청</button><button class="tab" data-tab="roster">승인된 소환사</button><button class="tab hide" id="adminTab" data-tab="admin">관리자</button><button class="tab hide" id="matchTab" data-tab="match">팀 편성</button></div>
+<section id="apply" class="view">
+<div class="panel"><h2>소환사 참가 신청</h2><p class="sub">신청 후 관리자가 승인하면 공개 명단에 표시됩니다.</p>
+<div class="grid"><label>소환사 이름<input id="summoner" placeholder="게임 닉네임"></label><label>티어<select id="tier"><option>언랭크</option><option>아이언</option><option>브론즈</option><option>실버</option><option>골드</option><option>플래티넘</option><option>에메랄드</option><option>다이아몬드</option><option>마스터</option><option>그랜드마스터</option><option>챌린저</option></select></label><label>주 포지션<select id="role"><option>탑</option><option>정글</option><option>미드</option><option>원딜</option><option>서폿</option></select></label></div>
+<div class="row" style="margin-top:12px"><button class="primary" id="submitApply">참가 신청</button><span id="applyMsg" class="note"></span></div></div>
+<div class="panel"><h3>내 신청 현황</h3><div id="myStatus" class="sub">로그인 후 확인할 수 있습니다.</div></div>
+</section>
+<section id="roster" class="view" hidden><div class="panel"><h2>승인된 소환사 명단</h2><div class="scroll"><table><thead><tr><th>소환사</th><th>티어</th><th>포지션</th></tr></thead><tbody id="rosterBody"></tbody></table></div></div></section>
+<section id="admin" class="view" hidden><div class="panel"><h2>관리자 대시보드</h2><p class="sub">신청을 승인하거나 거절하고, 승인된 참가자의 정보를 수정할 수 있습니다.</p><h3>대기 중인 신청</h3><div class="scroll"><table><thead><tr><th>신청자 이메일</th><th>소환사</th><th>티어</th><th>포지션</th><th>처리</th></tr></thead><tbody id="pendingBody"></tbody></table></div><h3>전체 참가자 관리</h3><div class="scroll"><table><thead><tr><th>소환사</th><th>티어</th><th>포지션</th><th>상태</th><th>관리</th></tr></thead><tbody id="allBody"></tbody></table></div></div></section>
+<section id="match" class="view" hidden><div class="panel"><h2>5대5 팀 편성</h2><p class="sub">승인된 참가자 중 10명을 선택해 팀을 편성합니다.</p><div class="row"><select id="teamMode"><option value="balance">티어 밸런스</option><option value="random">랜덤</option></select><button class="primary" id="makeTeams">팀 편성</button></div><div id="teamPick" class="grid"></div></div><div class="teams"><div class="team"><b style="color:#80c4ff">🔵 BLUE TEAM</b><div id="blueTeam"></div></div><div class="team red"><b style="color:#ff9da5">🔴 RED TEAM</b><div id="redTeam"></div></div></div></section>
+</div>
+</main>
+<script src="app.js"></script>
+</body></html>
