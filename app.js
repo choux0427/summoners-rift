@@ -1,6 +1,6 @@
 // 1) Supabase 프로젝트의 Project URL과 anon/public key를 아래에 입력하세요.
 // 절대로 service_role 키를 브라우저 코드에 넣지 마세요.
-const SUPABASE_URL = "https://vbtamhsiwktpveemyctl.supabase.co/rest/v1/";
+const SUPABASE_URL = "https://vbtamhsiwktpveemyctl.supabase.co";
 const SUPABASE_ANON_KEY = "sb_publishable_3QRrcOBrRGd9_5SqQtRQgw_19i0K2BO";
 const ADMIN_EMAIL = "choux0427@gmail.com";
 const configured = !SUPABASE_URL.includes("YOUR_") && !SUPABASE_ANON_KEY.includes("YOUR_");
